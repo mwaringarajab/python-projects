@@ -1,0 +1,35 @@
+name: Auto Push to GitHub
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"  # Change to a specific version if needed
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt || echo "No dependencies found"
+
+      - name: Auto-Commit and Push
+        run: |
+          git config --global user.name "mwaringarajab"
+          git config --global user.email "mwaringarajab01@gmail.com"
+          git add .
+          git commit -m "Auto-update via GitHub Actions" || echo "No changes to commit"
+          git push
